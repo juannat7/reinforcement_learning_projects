@@ -37,6 +37,7 @@ if __name__ == "__main__":
     # play with human
     else:
         p1 = BotPlayer("computer")
+        p1.exp_rate = 0.  # dont want to explore during competition
         p1.loadPolicy(os.path.join(configs.POLICIES_DIR, "policy_player_1"))
 
         p2 = HumanPlayer("human")
