@@ -19,11 +19,11 @@ class BotPlayer():
         self.states_val = {}
 
     def getHash(self, board):
-        return str(board.reshape(self.BOARD_COLS, self.BOARD_ROWS))
+        return str(board.reshape(self.BOARD_COLS * self.BOARD_ROWS))
 
     def chooseAction(self, positions, board, playerSymbol):
         # choose randomly
-        if np.random.normal(0,1,1) <= self.exp_rate:
+        if (np.random.uniform(0, 1, 1) <= self.exp_rate) or (len(self.states_val) == 0.):
             idx = np.random.choice(len(positions))
             action = positions[idx]
 
@@ -64,7 +64,7 @@ class BotPlayer():
 
     def loadPolicy(self, file):
         fr = open(file, 'rb')
-        self.states_value = pickle.load(fr)
+        self.states_val = pickle.load(fr)
         fr.close()
 
 class HumanPlayer:
@@ -73,9 +73,14 @@ class HumanPlayer:
 
     def chooseAction(self, positions):
         while True:
-            row = int(input("Input your action row:"))
-            col = int(input("Input your action col:"))
-            action = (row, col)
+            input_1 = input("Input your action: row or (row, col):")
+            if ',' in input_1:
+                row, col = input_1.split(',')
+                action = (int(row), int(col))
+            else:
+                row = int(input_1)
+                col = int(input("Input your action col:"))
+                action = (row, col)
             if action in positions:
                 return action
 
